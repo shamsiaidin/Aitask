@@ -1,0 +1,150 @@
+[Rainmeter]
+Update=1000
+AccurateText=1
+
+[Metadata]
+Name=TaskBarTender Network
+Author=rev3rsor
+Information=A small network bar indicator, with upload and download. Default has upload on the left and bottom, download on the right and top.
+Version=1.2
+License=Creative Commons Attribution-Non-Commercial-Share Alike 3.0
+
+; Variables
+
+[Variables]
+; change these!
+Width=5
+Height=40
+HorGap=50
+	; horizontal gap between bars
+MaxUpload=983040
+	; maximum upload speed in bits/second
+	; for megabits: multiply by 1048576
+	; for kilobytes: multiply by 8192
+MaxDownload=4096000
+	; maximum download speed in bits/second
+FontSize=10
+
+; Styles
+
+[StyleNetBar]
+Y=0
+H=#Height#
+W=#Width#
+DynamicVariables=1
+BarColor=255,255,255,255
+SolidColor=255,255,255,50
+
+[StyleNetText]
+FontSize=#FontSize#
+FontFace=NewMedia
+FontColor=255,255,255,255
+AntiAlias=1
+NumOfDecimals=0
+
+; Upload
+
+[MeasureNetOut]
+Measure=NetOut
+Interface=Best
+MinValue=0
+MaxValue=#MaxUpload#
+
+[MeterNetOutBar]
+MeasureName=MeasureNetOut
+Meter=Bar
+MeterStyle=StyleNetBar
+X=0
+	; X=(#Width#+#HorGap#) to swap bar locations
+Flip=0
+	; Flip=1 to go from top to bottom
+	; remove/Flip=0 to go from bottom to top
+
+[MeterNetOutText]
+MeasureName=MeasureNetOut
+Meter=String
+MeterStyle=StyleNetText
+X=(#Width#+3)
+Y=(#Height#-3)
+	; Y=3 to swap text locations
+StringAlign=LeftCenter
+AutoScale=1
+NumOfDecimals=1
+Text=%1B
+
+; Download
+
+[MeasureNetIn]
+Measure=NetIn
+Interface=Best
+MinValue=0
+MaxValue=#MaxDownload#
+
+[MeterNetInBar]
+MeasureName=MeasureNetIn
+Meter=Bar
+MeterStyle=StyleNetBar
+X=(#Width#+#HorGap#)
+	; X=0 to swap bar locations
+Flip=1
+	; Flip=1 to go from top to bottom
+	; remove/Flip=0 to go from bottom to top
+
+[MeterNetInText]
+MeasureName=MeasureNetIn
+Meter=String
+MeterStyle=StyleNetText
+X=(#Width#+3)
+Y=3
+	; Y=(#Height#-3) to swap text locations
+StringAlign=LeftCenter
+AutoScale=1
+NumOfDecimals=1
+Text=%1B
+[measureIP]
+; This measure returns your IPv4 address. WebParser measures are relatively complicated. If you're a beginner with
+; Rainmeter, take a look at some of the other illustro skins before modifying this one.
+; For more information, go here: https://docs.rainmeter.net/tips/ipaddress
+Measure=Plugin
+Plugin=WebParser
+URL=https://checkip.amazonaws.com/
+UpdateRate=14400
+RegExp=(?siU)^(.*)$
+StringIndex=1
+Substitute="":"N/A"
+; Substitute works as follows: "A":"B" where A is a string to substitute and B is a string
+; to substitute with. In this case, it substutes "" (i.e. empty) to N/A
+[meterIPLabel]
+Meter=String
+MeterStyle=styleLeftText
+X=65
+Y=10
+W=70
+H=14
+Text=IP Address
+BarColor=255,255,255,255
+SolidColor=255,255,255,50
+MeterStyle=StyleNetBar
+FontSize=#FontSize#
+FontFace=NewMedia
+FontColor=255,255,255,255
+
+
+[meterIPValue]
+Meter=String
+MeterStyle=styleRightText
+MeasureName=measureIP
+X=140
+Y=0r
+; r stands for relative. In this case, the Y postition of meterValueCPU is 0 pixels
+; below the Y value of the previous meter (i.e it's the same as in meterLabelCPU).
+W=100
+H=14
+Text=%1
+; %1 stands for the value of MeasureName (measureIP in this case).
+BarColor=255,255,255,255
+SolidColor=255,255,255,50
+MeterStyle=StyleNetBar
+FontSize=#FontSize#
+FontFace=NewMedia
+FontColor=255,255,255,255
